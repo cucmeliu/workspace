@@ -8,11 +8,14 @@ import urllib2
 import hashlib
 import json
 import time
+import string
 # from urllib import parse
 # from urllib import request
 
 from urllib import quote
+from urllib import quote_plus
 from urllib import urlencode
+
 
 # 签名算法
 # 1. 计算步骤
@@ -40,20 +43,19 @@ def getReqSign(params, appkey):
     # params = [(k,params[k]) for k in sorted(params.keys())]
 
     params = sorted(params.items(), key=lambda d:d[0])
-
-    # print params
+    #print params
+	
+    print '------------------'
 
     # 2. 拼接URL键值对
     str = ''
     for (k, v) in params:
         # print(k, v)
         if v != '':
-            str = str + k + '=' + urllib.quote(v) + '&'
+            str = str + k + '=' + quote_plus(v) + '&'
 
     # 3. 拼接app_key
     str += 'app_key='+appkey
-
-    # print str
 
     # 4. MD5运算+转换大写，得到请求签名
     sign = hashlib.md5(str.encode("utf-8")).hexdigest().upper()
@@ -63,23 +65,22 @@ def getReqSign(params, appkey):
 
 def doHttpPost(url, params):
 
+    print params
+    print '----------'
     #py 2.6
     postdata = urlencode(params)
     #py 3
     #postdata = parse.urlencode(params).encode('utf-8')
-
-    #print(postdata)
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 
     # py 2
-    req = urllib2.Request(url, postdata)#json.dumps(postdata))
+    req = urllib2.Request(url, postdata) #json.dumps(postdata))
     req.add_header('Content-Type', 'application/x-www-form-urlencoded')
     res_data = urllib2.urlopen(req)
     res = res_data.read()
-    #res = json.loads(res_data.read())
 
     # py 3
     # req = request.Request(url, data=postdata, headers=headers)
@@ -96,10 +97,13 @@ def doHttpPost(url, params):
 def main():
     #// 图片base64编码
     #path   = 'http://www.ikohoo.com/ikohoo/images/about_img_4.jpg'
-    path = '/Users/apple/Downloads/101524095_2.png'
+    #path = '/Users/apple/Downloads/101524095_2.png'
+	
+    path='C:\Users\leo\Downloads\jenkins.jpg'
 
-    with open(path, 'rb') as f:
-        b64img = base64.b64encode(f.read())
+    #with open(path, 'rb') as f:
+    f = file(path)
+    b64img = base64.b64encode(f.read())
 
     #// 设置请求数据
     appkey = '6MqCaZ2zVYh6wYxF'
@@ -114,7 +118,7 @@ def main():
 
     params['sign'] = getReqSign(params, appkey)
 
-    print params
+    # print params
 
     # // 执行API调用
     url = 'https://api.ai.qq.com/fcgi-bin/image/image_tag'
