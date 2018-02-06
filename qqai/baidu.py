@@ -58,7 +58,7 @@ def plant(access_token, img_file):
 	response = urllib2.urlopen(request)
 	content = response.read()
 	if content:
-		print content
+		print content.decode('utf-8')
 		
 def main():
 	img_file='C:\\Users\\leo\\Downloads\\t019c5a8b26bf41f312.jpg'
