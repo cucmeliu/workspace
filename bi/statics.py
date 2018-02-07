@@ -28,12 +28,12 @@ import argparse
 #             rst.append([row[1], row[2], row[4]])
 #         return rst
 
-class record:
-    def __init__(self):
-        self.phone = ''
-        self.count = 0
-        self.month = ''
-        self.plat = ''
+# class record:
+#     def __init__(self):
+#         self.phone = ''
+#         self.count = 0
+#         self.month = ''
+#         self.plat = ''
 
 def parsefile(filename, outfile, month, plat):
     f = file(filename)
