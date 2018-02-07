@@ -11,24 +11,31 @@ import csv
 import datetime
 import getopt
 from sys import argv
+import argparse
 #import pandas as pd
 
 
-def sortBase(filename):
-    # df=pd.read_csv(rfilename,encoding='gb2312')
-    # print df
-    with open(filename,'rb') as csvfile:
-        reader = csv.reader(csvfile)
-        # rows= [row for row in reader]
-        # print rows
+# def sortBase(filename):
+#     # df=pd.read_csv(rfilename,encoding='gb2312')
+#     # print df
+#     with open(filename,'rb') as csvfile:
+#         reader = csv.reader(csvfile)
+#         # rows= [row for row in reader]
+#         # print rows
+#
+#         rst = ["","",""]
+#         for row in reader:
+#             rst.append([row[1], row[2], row[4]])
+#         return rst
 
-        rst = ["","",""]
-        for row in reader:
-            rst.append([row[1], row[2], row[4]])
-        return rst
+class record:
+    def __init__(self):
+        self.phone = ''
+        self.count = 0
+        self.month = ''
+        self.plat = ''
 
-
-def parsefile(filename, outfile):
+def parsefile(filename, outfile, month, plat):
     f = file(filename)
 
     dataDict = {}
@@ -43,72 +50,60 @@ def parsefile(filename, outfile):
             dataDict[phone_pre] = 1
         else:
             dataDict[phone_pre] = dataDict[phone_pre] + 1
+
     f.close()
 
     with open(outfile, "wb") as csvFile:
         csvWriter = csv.writer(csvFile)
         for k,v in dataDict.iteritems():
-            csvWriter.writerow([k,v])
+            csvWriter.writerow([k,v, month+'-1', plat])#'%d'%v+','+month])
         csvFile.close()
 
-    # dataList = list(ab)
-    # with open(outfile, 'wb') as csvFile:
-    #     csvWriter = csv.writer(csvFile)
-    #     for data in dataList:
-    #         csvWriter.writerow(data)
-    #     csvFile.close
+def main(args):
 
-def usage():
-    print '''
-        Usage
-        statics -f filename
-    '''
+    rec_file = args.infile
+    rec_o_file = args.outfile
+    month = args.month    #datetime.datetime.now().strftime('%Y-%m')
+    plat = args.plat
 
-def main(argv):
-    # params
-    try:
-        options, args = getopt.getopt(argv, "hf:",["help", "file="])
-        print options
-        if len(options[0]) < 2:
-            usage()
-            sys.exit()
-    except getopt.GetoptError:
-        sys.exit()
+    if plat == 'yx':
+        plat = '云信'
+    elif plat == 'cf':
+        plat = '触发'
+    elif plat == 'yjcf':
+        plat = '云集触发'
+    elif plat == 'yjqf':
+        plat = '云集群发'
+    else:
+        print '怎么会没填平台标识呢？'
 
-    rec_file = ''
-
-    for option, value in options:
-        if option in ("-h", "--help"):
-            usage()
-            sys.exit()
-
-        if option in ("-f", "--file"):
-            rec_file = value
-        else: usage()
-
-
-	# read and deal with base info
-    # 读取最新号码段文件，按{号码段, 省, 运营商} 方式处理号码段，并按号码段排序
-    #base_file = "C:\\workspace\\git\\workspace\\bi\\phonebase.csv"
-    #rec_file = "C:\\workspace\\git\\workspace\\bi\\data\\201711.txt"
-    rec_o_file = rec_file + "_o"
+    if rec_o_file==None:
+        rec_o_file = rec_file + "_o"
+        print '未指定输出文件名，默认使用: ', rec_o_file
     #base = sortBase(base_file)
 
     # count by 号段，结果为 (1xxxxxx, count)
     now = datetime.datetime.now()
     now.strftime('%Y-%m-%d %H:%M:%S')
-    print "begin------at: ", now
+    print "--parse begin at: ", now
 
-    parsefile(rec_file, rec_o_file)
+    parsefile(rec_file, rec_o_file, month, plat)
 
     now = datetime.datetime.now()
     now.strftime('%Y-%m-%d %H:%M:%S')
-    print "end------at: ", now
-
-
+    print "-- parse end at: ", now
 
     # 读取记录文件，将累加，结果为{省,运营商, count}
 
 
 if __name__ =="__main__":
-	main(sys.argv[1:])
+	# main(sys.argv[1:])
+    parser = argparse.ArgumentParser(usage="号段统计工具", description="help info")
+    parser.add_argument("-f", "--infile", required=True, help="要处理的文件")
+    parser.add_argument("-o", "--outfile", help="输出文件名，如果未指定，则在infile后加_o")
+    parser.add_argument("-m", "--month", required=True, help="YYYY-M, 导入内容的月份，如2018-1 ")
+    parser.add_argument("-p", "--plat", required=True, choices=['yx', 'cf', 'yjcf', 'yjqf'], help="平台[ 云信<yx>, 触发<cf>, 云集触发<yjcf>, 云集群发<yjqf> ]" )
+
+    args=parser.parse_args()
+
+    main(args)
