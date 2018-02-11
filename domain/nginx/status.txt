@@ -1,0 +1,33 @@
+1.根据访问IP统计UV
+
+awk '{print $1}'  access.log|sort | uniq -c |wc -l
+
+2.统计访问URL统计PV
+
+awk '{print $7}' access.log|wc -l
+
+3.查询访问最频繁的URL
+
+awk '{print $7}' access.log|sort | uniq -c |sort -n -k 1 -r|more
+
+4.查询访问最频繁的IP
+
+awk '{print $1}' access.log|sort | uniq -c |sort -n -k 1 -r|more
+
+5.根据时间段统计查看日志
+
+cat  access.log| sed -n '/14\/Mar\/2015:21/,/14\/Mar\/2015:22/p'|more
+其中，第五条不好使，具体不说了，也没有统计当日的的pv和uv，自己为了zabbix写了一个，其实也很简单，记一下。
+
+pv：cat  /usr/local/nginx/logs/access.log| sed -n /`date "+%d\/%b\/%Y"`/p |awk '{print $7}' |sort|wc -l
+
+uv：cat  /usr/local/nginx/logs/access.log| sed -n /`date "+%d\/%b\/%Y"`/p |awk '{print $1}' |sort|uniq -c |wc -l
+
+这个是看当日的，看昨天的改日期格式就行。
+
+# awk 'END{print "PV is:",NR}' access.log 
+PV is: 1881955
+# awk '{s[$1]+=1} END{for(i in s){sum+=1}} END{print "UV is:",sum}' access.log 
+UV is: 64953
+# awk '{s[$7]+=1} END{for(i in s){print s[i],i}}' access.log  | sort -rn | head -10
+# 只打印出访问次数最多的10条记录
