@@ -1,4 +1,4 @@
-
+# -*- coding: UTF-8 -*-
 # 功能：将一个二重列表写入到csv文件中
 # 输入：文件名称，数据列表
 def createListCSV(fileName="", dataList=[]):
@@ -33,7 +33,7 @@ def createDictCSV(fileName="", dataDict={}):
 
 # 功能：从csv文件中读取一个字典
 # 输入：文件名称，keyIndex,valueIndex
-def readDictCSV(fileName="", keyIndex=0, valueIndex=1):
+def readDictCSV(fileName="", keyIndex=0, valueIndex=1,  splitsymbol=","):
     dataDict = {}
     with open(fileName, "r") as csvFile:
         dataLine = csvFile.readline().strip("\n")
@@ -46,7 +46,7 @@ def readDictCSV(fileName="", keyIndex=0, valueIndex=1):
 
 # 功能：从csv文件中读取一个计数字典
 # 输入：文件名称，keyIndex
-def readDictCSV(fileName="", keyIndex=0):
+def readDictCSV2(fileName="", keyIndex=0):
     dataDict = {}
     with open(fileName, "r") as csvFile:
         dataLine = csvFile.readline().strip("\n")
