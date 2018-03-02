@@ -65,7 +65,7 @@ def main(args):
 
 if __name__ =="__main__":
 	# main(sys.argv[1:])
-    usage = ''' replace strs
+    usage = ''' replacetags [-f inputfile] [-o outputfile] [-m mapfile]
     eg. replacetags.exe -f A.txt -m TextModify.csv -o outA.txt
     '''
     parser = argparse.ArgumentParser(usage=usage, description="help info")

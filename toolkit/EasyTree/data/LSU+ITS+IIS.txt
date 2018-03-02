@@ -1,0 +1,6 @@
+U002
+-LSU--------AB934041-------LSU-nnnnnnnnnnnnnnnnnnnnnnnn-IIS----ABCABC----IIS-
+U001
+-LSU--------AB753846-------LSU--ITS----AB934065----ITS--IIS----ABABAB----IIS-
+U034
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn-ITS----AB934066----ITS-nnnnnnnnnnnnnnnnnnnnnn

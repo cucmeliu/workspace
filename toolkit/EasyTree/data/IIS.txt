@@ -1,0 +1,4 @@
+>ABABAB
+-IIS----ABABAB----IIS-
+>ABCABC
+-IIS----ABCABC----IIS-
