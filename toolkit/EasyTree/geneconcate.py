@@ -22,11 +22,7 @@ import codecs
 # 		碱基对对应的编码连续拼接
 # 		Datasheet中Unicode对应的碱基对不存在的，以其定长的n符号代替
 #
-# 基因拼接
-# 修改树
-# Help
-# Citation
-# Copyright
+
 
 # 实现方案
 # 1. 加载Datasheet到数组中
@@ -39,6 +35,10 @@ import codecs
 GEN_START = 4
 # 结束列，从后数
 GEN_END   = 2
+# 分隔符
+SPLITTER  = '\n'
+# None str
+NONE_STR = 'n'
 
 DATA_PATH = U'./data/'
 DATASHEET = DATA_PATH + u'Datasheet.xlsx'
@@ -91,12 +91,48 @@ def LoadGen(gentypes):
             # print genLen
             # for i in range(0, genLen):
             #     nn = nn + 'n'
-            genpair["None"] = 'n'*genLen #str("".join('n') for i in range(0, genLen))
+            genpair["None"] = NONE_STR*genLen #str("".join('n') for i in range(0, genLen))
             # print 'all gen:', t, '=', genpair
             allGen[t] = genpair
     # print '------------a--------a----a-'
     # print allGen
     return allGen
+
+# dna/rna文件的组织方式不是按行，而是以>为开头标记，因此重写此方法
+def LoadGen2(gentypes):
+    # 第一维存基因类型
+    # 第二维存碱基对（KTxxxxx: nnnnnnnnnnnn)
+    #print 'Loading gen pairs...'
+    allGen = {}
+    for t in gentypes:
+        filename = DATA_PATH + t + '.txt'
+        # print filename
+        with open(filename, 'r') as f:
+            k = ''
+            v = ''
+            genLen = 0
+            genpair = {}
+            while True:
+                line = f.readline().strip()
+                # print line
+                if not line:
+                    break
+
+                if line.startswith(">"):
+                    k = line[1:]
+                    v = ''
+                    genpair[k] = ''
+                else:
+                    v += line + SPLITTER
+                    genpair[k] = v
+                    genLen = len(v)
+
+            genpair["None"] = 'n'*genLen
+            allGen[t] = genpair
+
+        #print allGen
+    return allGen
+
 
 def genconcate(datasheet, gens):
     head = datasheet[0]
@@ -106,7 +142,7 @@ def genconcate(datasheet, gens):
         uid = row[0]
         constr = ""
         for c in range(GEN_START, len(row)-GEN_END):
-            # print (head[c], row[c])
+            #print (head[c], row[c])
             if row[c] is None:
                 row[c] = 'None'
             constr += gens[head[c]][row[c]]
@@ -124,17 +160,26 @@ def writetofile(gencon, filename):
             f.write(k+'\n')
             f.write(v+'\n')
 
-def main():
+def do_main():
     # Load from Datasheet.xlsx
+    print 'Loading dataset...'
     (datasheet, row, col) = LoadDatasheet(DATASHEET)
     gentypes = datasheet[0][4:col-GEN_END]
+    # print gentypes
     outfile = DATA_PATH
     for t in gentypes:
         outfile = outfile + t + '+'
     outfile = outfile[:len(outfile)-1] + '.txt'
     # 基因拼接
-    writetofile(genconcate(datasheet, LoadGen(gentypes)), outfile)
+    print 'Concating...'
+    writetofile(genconcate(datasheet, LoadGen2(gentypes)), outfile)
+    print 'File saved in: ', outfile
 
+    print 'Done.'
+    return True
+
+def main():
+    do_main()
 
 if __name__ =="__main__":
     main()

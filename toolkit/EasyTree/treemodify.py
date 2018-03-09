@@ -5,7 +5,9 @@
 # author: leo.liu
 # date: 2018.2.28
 
+import sys
 import geneconcate
+
 
 DATA_PATH = U'./data/'
 DATASHEET = DATA_PATH + u'Datasheet.xlsx'
@@ -27,18 +29,24 @@ def replacetree(datasheet, filename):
     ostr = f.read()
 
     for (k, v) in dic.items():
-        #print k, v
         ostr = ostr.replace(k, v)
 
-    o.write(unicode(ostr).strip())
+    #print ostr
+
+    o.write(ostr)#(unicode(ostr).strip())
     f.close()
     o.close()
 
 
-def main():
+def do_main():
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     (datasheet, row, col) = geneconcate.LoadDatasheet(DATASHEET)
     replacetree(datasheet, TREE_FILE)
+    return True
 
+def main():
+    do_main()
 
 if __name__ =="__main__":
     main()
