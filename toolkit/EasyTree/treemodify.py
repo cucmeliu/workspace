@@ -6,10 +6,12 @@
 # date: 2018.2.28
 
 import sys
+import os
 import geneconcate
 
 
 DATA_PATH = U'./data/'
+RST_PATH = U'./data/result/'
 DATASHEET = DATA_PATH + u'Datasheet.xlsx'
 TREE_FILE = DATA_PATH + u'Tree.txt'
 
@@ -23,8 +25,10 @@ def replacetree(datasheet, filename):
         dic[row[0]] = row[1] + " " + row[2]
 
     f = file(filename)
-    outfile = filename.replace('.txt', '_o.txt')
+    outfile = filename.replace('.txt', '_o.txt').replace(DATA_PATH, RST_PATH)
+    print outfile
     o = file(outfile, 'wb')
+
 
     ostr = f.read()
 
@@ -32,7 +36,6 @@ def replacetree(datasheet, filename):
         ostr = ostr.replace(k, v)
 
     #print ostr
-
     o.write(ostr)#(unicode(ostr).strip())
     f.close()
     o.close()
@@ -46,6 +49,8 @@ def do_main():
     return True
 
 def main():
+    if not os.path.exists(RST_PATH):
+        os.mkdir(RST_PATH)
     do_main()
 
 if __name__ =="__main__":

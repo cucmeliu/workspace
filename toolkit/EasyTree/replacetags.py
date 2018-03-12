@@ -16,6 +16,7 @@ import argparse
 import csvdictlist
 
 DATA_PATH = U'./data/'
+RST_PATH = U'./data/result/'
 IN_FILE = DATA_PATH + u'A.txt'
 MAP_FILE = DATA_PATH + u'TextModify.csv'
 
@@ -51,17 +52,9 @@ def parsefile(filename, outfile, mapfile):
 
 def do_main(args):
 
-    rec_file = args.infile
-    rec_o_file = args.outfile
-    map_file = args.mapfile    #datetime.datetime.now().strftime('%Y-%m')
-
-    if rec_file == None:
-        rec_file = IN_FILE
-    if map_file == None:
-        map_file = MAP_FILE
-    if rec_o_file==None:
-        rec_o_file = rec_file.replace('.txt', '_o.txt')
-        #print 'out file name is NOT given, use default: ', rec_o_file
+    rec_file = IN_FILE if (args == None or args.infile == None) else args.infile
+    rec_o_file = rec_file.replace('.txt', '_o.txt').replace(DATA_PATH, RST_PATH) if (args == None or args.outfile == None) else args.infile
+    map_file = MAP_FILE if (args == None or args.mapfile == None) else args.mapfile
 
     parsefile(rec_file, rec_o_file, map_file)
 
@@ -71,6 +64,8 @@ def do_main(args):
     return True
 
 def main(args):
+    if not os.path.exists(RST_PATH):
+        os.mkdir(RST_PATH)
     do_main(args)
 
 

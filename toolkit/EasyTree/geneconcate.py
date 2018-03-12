@@ -8,6 +8,7 @@
 from openpyxl import workbook
 from openpyxl import load_workbook
 import sys
+import os
 import codecs
 #from openpyxl.write.excel import ExcelWriter
 
@@ -41,6 +42,7 @@ SPLITTER  = '\n'
 NONE_STR = 'n'
 
 DATA_PATH = U'./data/'
+RST_PATH = U'./data/result/'
 DATASHEET = DATA_PATH + u'Datasheet.xlsx'
 
 
@@ -166,7 +168,7 @@ def do_main():
     (datasheet, row, col) = LoadDatasheet(DATASHEET)
     gentypes = datasheet[0][4:col-GEN_END]
     # print gentypes
-    outfile = DATA_PATH
+    outfile = RST_PATH
     for t in gentypes:
         outfile = outfile + t + '+'
     outfile = outfile[:len(outfile)-1] + '.txt'
@@ -179,6 +181,8 @@ def do_main():
     return True
 
 def main():
+    if not os.path.exists(RST_PATH):
+        os.mkdir(RST_PATH)
     do_main()
 
 if __name__ =="__main__":
