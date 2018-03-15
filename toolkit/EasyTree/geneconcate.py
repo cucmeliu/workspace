@@ -52,53 +52,56 @@ def LoadDatasheet(filename):
     row = len(list(ws.rows))
     col = len(list(ws.columns)) # 最后两列不要了
 
+    # 初始化空二维数组
     data = [[0 for i in range(col)] for i in range(row)]
 
+    # 填充
     for r in range(1, row+1):
         for c in range(1, col+1):
             data[r-1][c-1] = ws.cell(row=r, column=c).value
+
     return data, row, col
 
-def LoadGen(gentypes):
-    # 第一维存基因类型
-    # 第二维存碱基对（KTxxxxx: nnnnnnnnnnnn)
-    allGen = {}
-    for t in gentypes:
-        filename = DATA_PATH + t + '.txt'
-        # print filename
-        with open(filename, 'r') as f:
-            n = 0
-            k = ""
-            v = ""
-            genLen = 0
-            genpair = {}
-
-            while True:
-                n=n+1
-                line = f.readline().strip()
-                # print 'line ------', n, line
-                if not line:
-                    break
-
-                if n % 2 == 1:
-                    # 去掉行头的 > 符号
-                    k = line[1:]
-                    genpair[k] = ''
-                else:
-                    v = line
-                    genpair[k] = v
-                    genLen = len(v)
-            #print genpair
-            # nn = ""
-            # print genLen
-            # for i in range(0, genLen):
-            #     nn = nn + 'n'
-            genpair["None"] = NONE_STR*genLen #str("".join('n') for i in range(0, genLen))
-            # print 'all gen:', t, '=', genpair
-            allGen[t] = genpair
-    # print '------------a--------a----a-'
-    # print allGen
-    return allGen
+# def LoadGen(gentypes):
+#     # 第一维存基因类型
+#     # 第二维存碱基对（KTxxxxx: nnnnnnnnnnnn)
+#     allGen = {}
+#     for t in gentypes:
+#         filename = DATA_PATH + t + '.txt'
+#         # print filename
+#         with open(filename, 'r') as f:
+#             n = 0
+#             k = ""
+#             v = ""
+#             genLen = 0
+#             genpair = {}
+#
+#             while True:
+#                 n=n+1
+#                 line = f.readline().strip()
+#                 # print 'line ------', n, line
+#                 if not line:
+#                     break
+#
+#                 if n % 2 == 1:
+#                     # 去掉行头的 > 符号
+#                     k = line[1:]
+#                     genpair[k] = ''
+#                 else:
+#                     v = line
+#                     genpair[k] = v
+#                     genLen = len(v)
+#             #print genpair
+#             # nn = ""
+#             # print genLen
+#             # for i in range(0, genLen):
+#             #     nn = nn + 'n'
+#             genpair["None"] = NONE_STR*genLen #str("".join('n') for i in range(0, genLen))
+#             # print 'all gen:', t, '=', genpair
+#             allGen[t] = genpair
+#     # print '------------a--------a----a-'
+#     # print allGen
+#     return allGen
 
 # dna/rna文件的组织方式不是按行，而是以>为开头标记，因此重写此方法
 def LoadGen2(gentypes):
@@ -121,7 +124,8 @@ def LoadGen2(gentypes):
                     break
 
                 if line.startswith(">"):
-                    k = line[1:]
+
+                    k = line #[1:]
                     v = ''
                     genpair[k] = ''
                 else:
@@ -129,7 +133,7 @@ def LoadGen2(gentypes):
                     genpair[k] = v
                     genLen = len(v)
 
-            genpair["None"] = 'n'*genLen
+            genpair[">None"] = 'n'*genLen
             allGen[t] = genpair
 
         #print allGen
@@ -141,15 +145,18 @@ def genconcate(datasheet, gens):
     data = datasheet[1:]
     rst = {}
     for row in data:
-        uid = row[0]
+        uid = ">" + row[0]
         constr = ""
         for c in range(GEN_START, len(row)-GEN_END):
             #print (head[c], row[c])
             if row[c] is None:
                 row[c] = 'None'
-            constr += gens[head[c]][row[c]]
-        rst[uid] = constr
 
+            row_modi = ">" + row[c]
+
+            constr += gens[head[c]][row_modi]
+        rst[uid] = constr
+    #print rst
     return rst
 
 def writetofile(gencon, filename):

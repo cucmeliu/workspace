@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['EasyTree.py'],
-             pathex=['c:\\workspace\\git\\workspace\\toolkit\\EasyTree'],
+             pathex=['C:\\workspace\\git\\workspace\\toolkit\\EasyTree'],
              binaries=[],
              datas=[],
              hiddenimports=[],
