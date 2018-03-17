@@ -5,6 +5,8 @@
 # author: leo.liu
 # date: 2018.2.22
 
+# 根据TextModify.csv/xlsx 中的对应关系，对A.txt中的相应字符串替换
+
 import os
 import sys
 import csv
@@ -19,6 +21,8 @@ DATA_PATH = U'./data/'
 RST_PATH = U'./data/result/'
 IN_FILE = DATA_PATH + u'A.txt'
 MAP_FILE = DATA_PATH + u'TextModify.csv'
+
+
 
 def parsefile(filename, outfile, mapfile):
     dataDict = csvdictlist.readDictCSV(mapfile)
