@@ -24,19 +24,30 @@ java -jar statsvn.jar D:\statsvn\trunk\svn.log D:\statsvn\trunk -include **/*.ja
 '''
 
 import os
+import logging
+
 import svn_notrunk
 import svn_withtrunk
 import svn_stat_index
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler('svn_stat.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
+
 def main():
-    print 'stats projects with trunk ...'
+    logger.info( 'stats projects with trunk ...')
     svn_withtrunk.statsvn()
-    print 'stats projects without trunk ...'
+    logger.info( 'stats projects without trunk ...')
     svn_notrunk.statsvn()
-    print 'build index page...'
+    logger.info( 'build index page...')
     svn_stat_index.buildindex()
-    print 'done'
+    logger.info( 'done')
 
 if __name__=="__main__":
     main()

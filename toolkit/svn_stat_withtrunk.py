@@ -3,28 +3,12 @@
 # Filename: svn_backup
 # author: leo.liu
 # date: 2018.5.10
-  
-'''
-利用命令
 
-svn co https://192.168.2.20/svn/DBToolKit/trunk
-
-生成日志
-svn log -v --xml D:\statsvn\trunk > D:\statsvn\trunk\svn.log
-
-生成统计信息
-
-java -jar statsvn.jar D:\statsvn\trunk\svn.log D:\statsvn\trunk
-
-生成详细信息
-
-java -jar statsvn.jar D:\statsvn\trunk\svn.log D:\statsvn\trunk -include **/*.java:**/*.jsp:**/*.js:**/*.css:**/*.xml -exclude **/js/jquery-1.6.2.min.js
-
-等待一段时间，D:\statsvn目录下就会生成大量的统计文件，打开index.html即可进行查看。
-'''
 
 import os
-import svn_stat_index
+import logging
+
+import svn_stat_func
 
 ##### prod env
 svn_base='https://127.0.0.1:443/svn/'
@@ -56,6 +40,16 @@ idx_file    = 'F:\\backuprep\\reports\index.html'
 # svnstat命令路径
 stat_cmd    = 'F:\\backuprep\\statsvn-0.7.0\\statsvn.jar'  
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler('svn_stat.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
+
+
 def statsvn():
     for project in projects:
         svn_url = svn_base + project  + '/trunk/'
@@ -63,26 +57,10 @@ def statsvn():
         log_file = log_dir + project + '.log'
         rept_dir = rept_base + project
 
-        if not os.path.exists(repo_trunk):
-            cmd = 'svn co %s %s'%(svn_url, repo_trunk)
-        else:
-            cmd = 'svn up %s '%(repo_trunk)
-        if os.system(cmd) == 0:
-            print 'succ update ', project
-        else:
-            print 'FAILED update ', project
+        logger.info('-- Deal with %s --'%(project))
+        svn_stat_func.statsvn(project, svn_url, repo_trunk, log_file, rept_dir)
 
-        cmd = 'svn log -v --xml %s > %s '%(repo_trunk, log_file)
-        if os.system(cmd) == 0:
-            print 'succ gen log for ', project
-        else:
-            print 'FAILED gen log for ', project
 
-        cmd = 'java -jar %s %s %s -output-dir %s '%(stat_cmd, log_file, repo_trunk, rept_dir)
-        if os.system(cmd) == 0:
-            print 'succ gen stats for ', project
-        else:
-            print 'FAILED gen stats for ', project
 
 def main():
     statsvn()
