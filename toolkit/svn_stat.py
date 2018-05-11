@@ -26,8 +26,8 @@ java -jar statsvn.jar D:\statsvn\trunk\svn.log D:\statsvn\trunk -include **/*.ja
 import os
 import logging
 
-import svn_notrunk
-import svn_withtrunk
+import svn_stat_notrunk
+import svn_stat_withtrunk
 import svn_stat_index
 
 
@@ -41,10 +41,11 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 def main():
+	logger.info('====start stats ==========')
     logger.info( 'stats projects with trunk ...')
-    svn_withtrunk.statsvn()
+    svn_stat_withtrunk.statsvn()
     logger.info( 'stats projects without trunk ...')
-    svn_notrunk.statsvn()
+    svn_stat_notrunk.statsvn()
     logger.info( 'build index page...')
     svn_stat_index.buildindex()
     logger.info( 'done')
