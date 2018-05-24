@@ -1,0 +1,15 @@
+POST http://user.ci123.com/api/Reg/sendauth HTTP/1.1
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+Referer: http://user.ci123.com/account/NewAccount/?back_url=http://www.ci123.com/
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko
+Content-Length: 25
+Host: user.ci123.com
+Connection: Keep-Alive
+Pragma: no-cache
+Cookie: cck_count=0; cck_lasttime=1527141456359; PHPSESSID=6fab888afd8596175aad834aaf02cdf1; UM_distinctid=1638687e9c0283-07f2164952f725-2a1d6c26-130980-1638687e9c13b5
+
+mobile=13651943930&type=1

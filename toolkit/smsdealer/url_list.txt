@@ -1,0 +1,18 @@
+{
+"urls":[
+    { "name": "",
+        "url": "https://www.newbenben.com/user/sendSmsCode2Register",
+        "header": [
+            {"k": "Host", "v": "www.newbenben.com"},
+            {"k": "Cookie", "v": "JSESSIONID=ED241D160B0EE291BB7E2A22B48E71DD"}
+        ],
+        "param": [
+            {"k": "k1", "v": "v1"},
+            {"k": "k2", "v": "v2"}
+        ]
+    },
+    {
+    }
+]
+
+}

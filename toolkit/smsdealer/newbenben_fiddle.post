@@ -1,0 +1,15 @@
+POST https://www.newbenben.com/user/sendSmsCode2Register HTTP/1.1
+Content-Type: application/json; charset=utf-8
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Referer: https://www.newbenben.com/web/newbenben/regist.jsp?random=0.49269077203832484
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko
+Host: www.newbenben.com
+Content-Length: 23
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: JSESSIONID=ED241D160B0EE291BB7E2A22B48E71DD
+
+{"phone":"17051039121"}
