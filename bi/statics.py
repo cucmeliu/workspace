@@ -75,11 +75,11 @@ def main(args):
     elif plat == 'yjqf':
         plat = '云集群发'
     else:
-        print '怎么会没填平台标识呢？'
+        print 'No Plate Identify.'
 
     if rec_o_file==None:
         rec_o_file = rec_file + "_o"
-        print '未指定输出文件名，默认使用: ', rec_o_file
+        print 'NO output file name is appointed, use default: ', rec_o_file
     #base = sortBase(base_file)
 
     # count by 号段，结果为 (1xxxxxx, count)
@@ -97,12 +97,12 @@ def main(args):
 
 
 if __name__ =="__main__":
-	# main(sys.argv[1:])
-    parser = argparse.ArgumentParser(usage="号段统计工具", description="help info")
-    parser.add_argument("-f", "--infile", required=True, help="要处理的文件")
-    parser.add_argument("-o", "--outfile", help="输出文件名，如果未指定，则在infile后加_o")
-    parser.add_argument("-m", "--month", required=True, help="YYYY-M, 导入内容的月份，如2018-1 ")
-    parser.add_argument("-p", "--plat", required=True, choices=['yx', 'cf', 'yjcf', 'yjqf'], help="平台[ 云信<yx>, 触发<cf>, 云集触发<yjcf>, 云集群发<yjqf> ]" )
+    # main(sys.argv[1:])
+    parser = argparse.ArgumentParser(usage="static -f input_file [-o output_file] -m month_of_data -p plat_of_data ", description="Phone Num Static toolkit")
+    parser.add_argument("-f", "--infile", required=True, help="file name to be parsed")
+    parser.add_argument("-o", "--outfile", help="Output file name, infilename_o by default")
+    parser.add_argument("-m", "--month", required=True, help="YYYY-M, month of the data, eg.2018-1 ")
+    parser.add_argument("-p", "--plat", required=True, choices=['yx', 'cf', 'yjcf', 'yjqf'], help="Plat[ Mass<yx>, Triger<cf>, Cloud_Triger<yjcf>, Cloud_Mass<yjqf> ]" )
 
     args=parser.parse_args()
 
